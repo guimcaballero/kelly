@@ -4,8 +4,10 @@ module Lib
     ( chat
     ) where
 
+import System.IO
 import Data.Text(pack, unpack, replace)
 import Database.SQLite.Simple
+
 
 data State = State { currentTopic::Int, name::String } deriving (Show)
 
@@ -19,28 +21,27 @@ instance ToRow KnowledgeUnit where
 
 chat :: IO ()
 chat = do
-    putStrLn "Hello! I'm Kelly!"
+    putStrLn $ wrapInBlue "Kelly: " ++ "Hello! I'm Kelly!"
     _name <- askName
     let state = State 1 _name
-    putStrLn $ processAnswer "Hello &&name!" state
-    putStrLn "How are you today?"
+    putStrLn $ wrapInBlue "Kelly: " ++ processAnswer "Hello &&name! How are you today?" state
     mainLoop state
 
 mainLoop :: State -> IO ()
 mainLoop state = do
-    input <- promptLine "You: "
+    input <- promptLine (wrapInYellow "You: ")
     if null input || input == "quit" then do
         putStrLn "Bye!"
         return ()
     else do
         answer <- findAnswer input state
-        putStrLn $ "Z: " ++ processAnswer ( kellyOutput answer ) state
+        putStrLn $ wrapInBlue "Kelly: "  ++ processAnswer ( kellyOutput answer ) state
         mainLoop $ changeTopic (unitId answer) state
 
 askName :: IO String
 askName = do
-    putStrLn "What's your name?"
-    _name <- promptLine "Name: "
+    putStrLn $ wrapInBlue "Kelly: " ++ "What's your name?"
+    _name <- promptLine (wrapInYellow "Name: ")
     if null _name then
        askName
     else
@@ -49,7 +50,14 @@ askName = do
 promptLine :: String -> IO String
 promptLine prompt = do
     putStr prompt
+    hFlush stdout
     getLine
+
+wrapInYellow :: String -> String
+wrapInYellow string = "\x001b[33m" ++ string ++ "\x001b[0m"
+
+wrapInBlue :: String -> String
+wrapInBlue string = "\x001b[36m" ++ string ++ "\x001b[0m"
 
 findAnswer :: String -> State -> IO KnowledgeUnit
 findAnswer text state = do
