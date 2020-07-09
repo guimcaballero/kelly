@@ -1,3 +1,1 @@
-# Changelog for cerebro-cli
-
-## Unreleased changes
+# Changelog for kelly
