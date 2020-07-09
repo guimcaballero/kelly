@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Wrappers
   other-modules:
       Paths_cerebro_cli
   hs-source-dirs:
