@@ -1,6 +1,6 @@
 # Kelly
 
-Kelly is a chatbot using the open source Cerebro database for content. It's a very naive implementation, but it works as a simple example of how to use the Cerebro database.
+Kelly is a chatbot using the open source [Cerebro](https://github.com/inbrainz/cerebro) database for content. It's a very naive implementation, but it works as a simple example of how to use the Cerebro database.
 
 It's implemented in Haskell, hence the name.
 
